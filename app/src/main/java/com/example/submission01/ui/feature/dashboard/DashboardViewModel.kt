@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.submission01.data.local.UsersSource
 import com.example.submission01.data.network.ApiConfig
 import com.example.submission01.data.network.response.UserSearchItemResponse
 import com.example.submission01.domain.model.User
-import com.example.submission01.domain.model.UsersSource
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,14 +22,18 @@ class DashboardViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    var users = arrayListOf<User>()
+    var users = mutableListOf<User>()
 
     companion object{
         private const val TAG = "DashboardViewModel"
     }
 
-    fun parseJSON(inputStream: InputStream): ArrayList<User> {
-        users = Gson().fromJson(readJSONFromAsset(inputStream), UsersSource::class.java).users
+    fun parseJSON(inputStream: InputStream): MutableList<User> {
+        users = Gson().fromJson(readJSONFromAsset(inputStream), UsersSource::class.java).users.map {
+            User(username = it.username, avatar = it.avatar, name = it.name, company = it.company,
+                location = it.location, repository = it.repository, follower = it.follower,
+                following = it.following)
+        }.toMutableList()
         return users
     }
 

@@ -11,7 +11,7 @@ import com.example.submission01.domain.model.User
 
 class UserAdapter internal  constructor(private val context: Context) : BaseAdapter() {
 
-    internal var users = arrayListOf<User>()
+    internal var users = mutableListOf<User>()
 
     override fun getCount(): Int = users.size
     override fun getItem(i: Int): Any = users[i]
