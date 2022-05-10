@@ -34,7 +34,7 @@ class UserAdapter internal constructor(private val context: Context,private val 
         viewHolder.binding.txtName.text = users[position].name
         viewHolder.binding.txtLocation.text = users[position].location
 
-        viewHolder.binding.imgPhoto.setOnClickListener {
+        viewHolder.binding.itemLayout.setOnClickListener {
             listener?.onItemClicked(users[position])
         }
     }

@@ -3,13 +3,15 @@ package com.example.submission01.ui.feature.userdetails
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.submission01.databinding.ActivityDetailUserBinding
 import com.example.submission01.domain.model.User
 
 class DetailUserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailUserBinding
-    private lateinit var user: User
+    private lateinit var detailUserViewModel: DetailUserViewModel
 
     companion object {
         const val EXTRA_USER = "extra_user"
@@ -19,10 +21,37 @@ class DetailUserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        user = intent.getParcelableExtra<User>(EXTRA_USER) as User
+        detailUserViewModel = ViewModelProvider(this,
+            ViewModelProvider.NewInstanceFactory()).get(DetailUserViewModel::class.java)
 
         initView()
+        initData()
+    }
+
+    private fun initView() {
+        val actionbar = supportActionBar
+        actionbar!!.title = ""
+        actionbar.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun initData() {
+        detailUserViewModel.user = intent.getParcelableExtra<User>(EXTRA_USER) as User
+
+        if (detailUserViewModel.user.id == 0) {
+            val fileName: String = detailUserViewModel.user.avatar.replace("@drawable/", "")
+            val avatarId =
+                this.resources.getIdentifier(fileName, "drawable", this.packageName)
+            binding.imgPhoto.setImageResource(avatarId)
+        }else {
+            Glide.with(this).load(detailUserViewModel.user.avatar).into(binding.imgPhoto)
+        }
+
+        binding.txtUsername.text = detailUserViewModel.user.username
+        binding.txtName.text = detailUserViewModel.user.name
+        binding.txtOfficeAndLocation.text = "${detailUserViewModel.user.company}, ${detailUserViewModel.user.location}"
+        binding.txtFollowers.text = detailUserViewModel.user.follower.toString()
+        binding.txtFollowing.text = detailUserViewModel.user.following.toString()
+        binding.txtRepository.text = detailUserViewModel.user.repository.toString()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -35,20 +64,4 @@ class DetailUserActivity : AppCompatActivity() {
         }
     }
 
-    private fun initView() {
-        val actionbar = supportActionBar
-        actionbar!!.title = ""
-        actionbar.setDisplayHomeAsUpEnabled(true)
-
-        val fileName: String = user.avatar.replace("@drawable/", "")
-        val avatarId = this.resources.getIdentifier(fileName, "drawable", this.packageName)
-
-        binding.imgPhoto.setImageResource(avatarId)
-        binding.txtUsername.text = user.username
-        binding.txtName.text = user.name
-        binding.txtOfficeAndLocation.text = "${user.company}, ${user.location}"
-        binding.txtFollowers.text = user.follower.toString()
-        binding.txtFollowing.text = user.following.toString()
-        binding.txtRepository.text = user.repository.toString()
-    }
 }
