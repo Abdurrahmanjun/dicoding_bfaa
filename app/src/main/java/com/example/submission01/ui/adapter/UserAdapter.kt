@@ -5,42 +5,47 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.submission01.R
 import com.example.submission01.databinding.ItemUserBinding
 import com.example.submission01.domain.model.User
 
-class UserAdapter internal  constructor(private val context: Context) : BaseAdapter() {
+class UserAdapter internal constructor(private val context: Context,private val listener: OnItemClickListener) :
+    RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     internal var users = mutableListOf<User>()
 
-    override fun getCount(): Int = users.size
-    override fun getItem(i: Int): Any = users[i]
-    override fun getItemId(i: Int): Long = i.toLong()
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int) =
+        ViewHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.item_user, viewGroup, false))
 
-    override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
-        var itemView = view
-        if (itemView == null) {
-            itemView = LayoutInflater.from(context).inflate(R.layout.item_user, viewGroup, false)
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        if (users[position].id == 0) {
+            val fileName: String = users[position].avatar.replace("@drawable/", "")
+            val avatarId =
+                context.resources.getIdentifier(fileName, "drawable", context.packageName)
+            viewHolder.binding.imgPhoto.setImageResource(avatarId)
+        }else {
+            Glide.with(context).load(users[position].avatar).into(viewHolder.binding.imgPhoto)
         }
 
-        val viewHolder = ViewHolder(itemView as View)
-        val hero = getItem(position) as User
-        viewHolder.bind(hero)
-        return itemView
-    }
+        viewHolder.binding.txtUsername.text = users[position].username
+        viewHolder.binding.txtName.text = users[position].name
+        viewHolder.binding.txtLocation.text = users[position].location
 
-    private inner class ViewHolder(view: View) {
-        private val binding = ItemUserBinding.bind(view)
-
-        fun bind(user: User) {
-            val fileName: String = user.avatar.replace("@drawable/", "")
-            val avatarId = context.resources.getIdentifier(fileName, "drawable", context.packageName)
-
-            binding.imgPhoto.setImageResource(avatarId)
-            binding.txtUsername.text = user.username
-            binding.txtName.text = user.name
-            binding.txtLocation.text = user.location
+        viewHolder.binding.imgPhoto.setOnClickListener {
+            listener?.onItemClicked(users[position])
         }
     }
 
+    override fun getItemCount() = users.size
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val binding = ItemUserBinding.bind(view)
+    }
+
+    interface OnItemClickListener{
+        fun onItemClicked(user: User)
+    }
 }

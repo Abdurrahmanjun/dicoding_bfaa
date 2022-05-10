@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.submission01.data.local.UsersSource
 import com.example.submission01.data.network.ApiConfig
 import com.example.submission01.data.network.response.UserSearchItemResponse
+import com.example.submission01.data.network.response.UserSearchResponse
 import com.example.submission01.domain.model.User
 import com.google.gson.Gson
 import retrofit2.Call
@@ -51,14 +52,14 @@ class DashboardViewModel : ViewModel() {
     fun getUsersFromAPi(query: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getUsers(query)
-        client.enqueue(object : Callback<List<UserSearchItemResponse>> {
+        client.enqueue(object : Callback<UserSearchResponse> {
             override fun onResponse(
-                call: Call<List<UserSearchItemResponse>>,
-                searchItemResponse: Response<List<UserSearchItemResponse>>
+                call: Call<UserSearchResponse>,
+                searchItemResponse: Response<UserSearchResponse>
             ) {
                 _isLoading.value = false
                 if (searchItemResponse.isSuccessful) {
-                    _listUsers.value = searchItemResponse.body()?.map {
+                    _listUsers.value = searchItemResponse.body()?.items?.map {
                         User(id = it.id, username = it.login, avatar = it.avatarUrl)
                     }
                 } else {
@@ -66,7 +67,7 @@ class DashboardViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<UserSearchItemResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<UserSearchResponse>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
