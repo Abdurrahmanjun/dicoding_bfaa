@@ -1,10 +1,13 @@
 package com.example.submission01.ui.feature.userdetails
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.submission01.R
 import com.example.submission01.databinding.ActivityDetailUserBinding
 import com.example.submission01.domain.model.User
 
@@ -15,6 +18,11 @@ class DetailUserActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_USER = "extra_user"
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.followers,
+            R.string.following,
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +42,7 @@ class DetailUserActivity : AppCompatActivity() {
         actionbar.setDisplayHomeAsUpEnabled(true)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initData() {
         detailUserViewModel.user = intent.getParcelableExtra<User>(EXTRA_USER) as User
 
@@ -49,9 +58,6 @@ class DetailUserActivity : AppCompatActivity() {
         binding.txtUsername.text = detailUserViewModel.user.username
         binding.txtName.text = detailUserViewModel.user.name
         binding.txtOfficeAndLocation.text = "${detailUserViewModel.user.company}, ${detailUserViewModel.user.location}"
-        binding.txtFollowers.text = detailUserViewModel.user.follower.toString()
-        binding.txtFollowing.text = detailUserViewModel.user.following.toString()
-        binding.txtRepository.text = detailUserViewModel.user.repository.toString()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

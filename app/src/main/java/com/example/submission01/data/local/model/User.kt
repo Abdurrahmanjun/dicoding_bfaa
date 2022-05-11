@@ -1,8 +1,5 @@
 package com.example.submission01.data.local.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 data class User (
     val username : String = "",
     val name : String = "",

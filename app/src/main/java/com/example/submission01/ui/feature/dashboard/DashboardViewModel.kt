@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.submission01.data.local.UsersSource
 import com.example.submission01.data.network.ApiConfig
-import com.example.submission01.data.network.response.UserSearchItemResponse
 import com.example.submission01.data.network.response.UserSearchResponse
 import com.example.submission01.domain.model.User
 import com.google.gson.Gson
