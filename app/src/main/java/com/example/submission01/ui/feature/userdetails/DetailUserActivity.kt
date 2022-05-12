@@ -3,13 +3,18 @@ package com.example.submission01.ui.feature.userdetails
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.submission01.R
 import com.example.submission01.databinding.ActivityDetailUserBinding
 import com.example.submission01.domain.model.User
+import com.example.submission01.ui.adapter.SectionsPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity() {
 
@@ -18,11 +23,6 @@ class DetailUserActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_USER = "extra_user"
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.followers,
-            R.string.following,
-        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,20 +44,25 @@ class DetailUserActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initData() {
-        detailUserViewModel.user = intent.getParcelableExtra<User>(EXTRA_USER) as User
+        detailUserViewModel.userDetail.observe(this) { setUserDetails(it) }
+        detailUserViewModel.isLoading.observe(this) { showLoading(it) }
+        val user = intent.getParcelableExtra<User>(EXTRA_USER) as User
+        detailUserViewModel.getuserDetail(user.username)
+    }
 
-        if (detailUserViewModel.user.id == 0) {
-            val fileName: String = detailUserViewModel.user.avatar.replace("@drawable/", "")
-            val avatarId =
-                this.resources.getIdentifier(fileName, "drawable", this.packageName)
-            binding.imgPhoto.setImageResource(avatarId)
-        }else {
-            Glide.with(this).load(detailUserViewModel.user.avatar).into(binding.imgPhoto)
-        }
+    private fun setUserDetails(user: User) {
+        Glide.with(this).load(user.avatar).into(binding.imgPhoto)
+        binding.txtUsername.text = user.username
+        binding.txtName.text = user.name
+        binding.txtOfficeAndLocation.text = "${user.company}, ${user.location}"
 
-        binding.txtUsername.text = detailUserViewModel.user.username
-        binding.txtName.text = detailUserViewModel.user.name
-        binding.txtOfficeAndLocation.text = "${detailUserViewModel.user.company}, ${detailUserViewModel.user.location}"
+        binding.viewPager.adapter = SectionsPagerAdapter(this)
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> { tab.text = "Followers ${user.follower}"}
+                1 -> { tab.text = "Following ${user.following}"}
+            }
+        }.attach()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -68,6 +73,10 @@ class DetailUserActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBarLayout.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }

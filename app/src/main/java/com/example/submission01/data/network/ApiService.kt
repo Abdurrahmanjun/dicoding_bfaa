@@ -1,5 +1,6 @@
 package com.example.submission01.data.network
 
+import com.example.submission01.data.network.response.UserDetailsResponse
 import com.example.submission01.data.network.response.UserSearchItemResponse
 import com.example.submission01.data.network.response.UserSearchResponse
 import retrofit2.Call
@@ -12,7 +13,7 @@ interface ApiService {
     fun getUsers(@Query("q") id: String): Call<UserSearchResponse>
 
     @GET("users/{username}")
-    fun getUserDetails(@Path("username") id: String): Call<UserSearchItemResponse>
+    fun getUserDetails(@Path("username") id: String): Call<UserDetailsResponse>
 
     @GET("users/{username}/followers")
     fun getUserfollowers(@Path("username") id: String): Call<UserSearchItemResponse>

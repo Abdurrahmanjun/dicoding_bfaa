@@ -8,9 +8,9 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Papaya"
+        android:text="a List Item"
         android:textStyle="bold"
-        android:textSize="100sp"
+        android:textSize="50sp"
         android:gravity="center"
         android:textColor="@color/black"
         android:layout_gravity="center"/>

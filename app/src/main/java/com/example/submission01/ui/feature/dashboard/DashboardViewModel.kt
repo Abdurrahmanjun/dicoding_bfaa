@@ -29,11 +29,13 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun parseJSON(inputStream: InputStream): MutableList<User> {
+        _isLoading.value = true
         users = Gson().fromJson(readJSONFromAsset(inputStream), UsersSource::class.java).users.map {
             User(username = it.username, avatar = it.avatar, name = it.name, company = it.company,
                 location = it.location, repository = it.repository, follower = it.follower,
                 following = it.following)
         }.toMutableList()
+        _isLoading.value = false
         return users
     }
 

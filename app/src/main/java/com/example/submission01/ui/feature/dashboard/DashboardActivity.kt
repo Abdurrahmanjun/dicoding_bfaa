@@ -44,10 +44,9 @@ class DashboardActivity : AppCompatActivity(), UserAdapter.OnItemClickListener {
     }
 
     private fun initData() {
-        setUserData(dashboardViewModel.parseJSON(this.assets.open("githubuser.json")))
-
         dashboardViewModel.listUsers.observe(this) { setUserData(it.toMutableList()) }
         dashboardViewModel.isLoading.observe(this) { showLoading(it) }
+        setUserData(dashboardViewModel.parseJSON(this.assets.open("githubuser.json")))
     }
 
     private fun setUserData(userlist: MutableList<User>) {
@@ -96,7 +95,7 @@ class DashboardActivity : AppCompatActivity(), UserAdapter.OnItemClickListener {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBarLayout.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onItemClicked(user: User) {
