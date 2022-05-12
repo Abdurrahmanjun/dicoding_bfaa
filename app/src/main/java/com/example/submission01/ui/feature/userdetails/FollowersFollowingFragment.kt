@@ -12,16 +12,16 @@ import com.example.submission01.databinding.FragmentListBinding
 import com.example.submission01.domain.model.User
 import com.example.submission01.ui.adapter.UserAdapter
 
-class FollowersFragment(val user: User) : Fragment() {
+class FollowersFollowingFragment(val user: User,val flag: String) : Fragment() {
 
     private lateinit var binding: FragmentListBinding
-    private lateinit var followersViewModel: FollowersViewModel
+    private lateinit var followersFollowingViewModel: FollowersFollowingViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(inflater, container, false)
-        followersViewModel = ViewModelProvider(this,
-            ViewModelProvider.NewInstanceFactory()).get(FollowersViewModel::class.java)
+        followersFollowingViewModel = ViewModelProvider(this,
+            ViewModelProvider.NewInstanceFactory()).get(FollowersFollowingViewModel::class.java)
         return binding.root
     }
 
@@ -40,10 +40,11 @@ class FollowersFragment(val user: User) : Fragment() {
     }
 
     private fun initData() {
-        followersViewModel.user = this.user
-        followersViewModel.listUsers.observe(viewLifecycleOwner) { setFollowerList(it.toMutableList()) }
-        followersViewModel.isLoading.observe(viewLifecycleOwner) { showLoading(it) }
-        followersViewModel.getUsersFollower()
+        followersFollowingViewModel.user = this.user
+        followersFollowingViewModel.flag = this.flag
+        followersFollowingViewModel.listUsers.observe(viewLifecycleOwner) { setFollowerList(it.toMutableList()) }
+        followersFollowingViewModel.isLoading.observe(viewLifecycleOwner) { showLoading(it) }
+        followersFollowingViewModel.getUsersFollower()
     }
 
     private fun setFollowerList(userlist: MutableList<User>) {

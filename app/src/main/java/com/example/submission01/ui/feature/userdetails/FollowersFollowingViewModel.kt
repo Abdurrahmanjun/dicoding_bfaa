@@ -6,14 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.submission01.data.network.ApiConfig
 import com.example.submission01.data.network.response.UserItemResponse
-import com.example.submission01.data.network.response.UserListResponse
 import com.example.submission01.domain.model.User
-import com.example.submission01.ui.feature.dashboard.DashboardViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FollowersViewModel : ViewModel() {
+class FollowersFollowingViewModel : ViewModel() {
 
     private val _listUsers = MutableLiveData<List<User>>()
     val listUsers: LiveData<List<User>> = _listUsers
@@ -22,14 +20,22 @@ class FollowersViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     var user : User = User()
+    var flag : String = ""
 
     companion object{
-        private const val TAG = "FollowersViewModel"
+        private const val TAG = "FollowersFollowingViewModel"
     }
 
     fun getUsersFollower() {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().getUserfollowers(user.username)
+        val client : Call<List<UserItemResponse>>
+
+        if (flag == "following") {
+            client = ApiConfig.getApiService().getUserfollowing(user.username)
+        } else {
+            client = ApiConfig.getApiService().getUserfollowers(user.username)
+        }
+
         client.enqueue(object : Callback<List<UserItemResponse>> {
             override fun onResponse(
                 call: Call<List<UserItemResponse>>,
