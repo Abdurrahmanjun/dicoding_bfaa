@@ -30,7 +30,7 @@ class FollowersFollowingViewModel : ViewModel() {
         _isLoading.value = true
         val client : Call<List<UserItemResponse>>
 
-        if (flag == "following") {
+        if (flag == FollowersFollowingFragment.FOLLOWING) {
             client = ApiConfig.getApiService().getUserfollowing(user.username)
         } else {
             client = ApiConfig.getApiService().getUserfollowers(user.username)

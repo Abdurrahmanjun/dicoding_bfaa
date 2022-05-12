@@ -17,6 +17,11 @@ class FollowersFollowingFragment(val user: User,val flag: String) : Fragment() {
     private lateinit var binding: FragmentListBinding
     private lateinit var followersFollowingViewModel: FollowersFollowingViewModel
 
+    companion object{
+        const val FOLLOWERS = "followers"
+        const val FOLLOWING = "following"
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(inflater, container, false)
