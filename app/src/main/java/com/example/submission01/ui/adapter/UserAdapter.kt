@@ -10,7 +10,7 @@ import com.example.submission01.R
 import com.example.submission01.databinding.ItemUserBinding
 import com.example.submission01.domain.model.User
 
-class UserAdapter internal constructor(private val context: Context,private val listener: OnItemClickListener) :
+class UserAdapter internal constructor(private val context: Context,private val listener: OnItemClickListener?) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     internal var users = mutableListOf<User>()

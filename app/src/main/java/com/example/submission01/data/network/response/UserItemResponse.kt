@@ -2,7 +2,7 @@ package com.example.submission01.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class UserSearchItemResponse(
+data class UserItemResponse(
     @SerializedName("avatar_url")
     val avatarUrl: String,
     @SerializedName("events_url")

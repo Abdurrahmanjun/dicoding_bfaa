@@ -56,7 +56,7 @@ class DetailUserActivity : AppCompatActivity() {
         binding.txtName.text = user.name
         binding.txtOfficeAndLocation.text = "${user.company}, ${user.location}"
 
-        binding.viewPager.adapter = SectionsPagerAdapter(this)
+        binding.viewPager.adapter = SectionsPagerAdapter(this, user= user)
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             when (position) {
                 0 -> { tab.text = "Followers ${user.follower}"}

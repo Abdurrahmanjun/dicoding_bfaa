@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.submission01.databinding.FragmentListBinding
+import com.example.submission01.domain.model.User
 
-class FollowingFragment : Fragment() {
+class FollowingFragment(username: User) : Fragment() {
 
     private lateinit var binding: FragmentListBinding
 
@@ -15,7 +16,6 @@ class FollowingFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = FragmentListBinding.inflate(inflater, container, false)
-        binding.tvTitle.text = "Following"
         return binding.root
     }
 }
