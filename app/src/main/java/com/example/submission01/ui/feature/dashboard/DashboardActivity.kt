@@ -10,10 +10,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.submission01.R
+import com.example.submission01.data.local.datastore.SettingPreferences
 import com.example.submission01.databinding.ActivityMainBinding
 import com.example.submission01.domain.model.User
 import com.example.submission01.ui.adapter.UserAdapter

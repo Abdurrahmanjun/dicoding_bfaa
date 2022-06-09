@@ -1,21 +1,23 @@
 package com.example.submission01.ui.feature.dashboard
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.submission01.data.local.UsersSource
+import androidx.lifecycle.*
+import com.example.submission01.data.local.dummy.UsersSource
+import com.example.submission01.data.local.datastore.SettingPreferences
 import com.example.submission01.data.network.ApiConfig
 import com.example.submission01.data.network.response.UserListResponse
 import com.example.submission01.domain.model.User
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.InputStream
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel() : ViewModel() {
 
+    // TODO: find how the right way to handle datastore
+    private lateinit var pref: SettingPreferences
     private val _listUsers = MutableLiveData<List<User>>()
     val listUsers: LiveData<List<User>> = _listUsers
 
@@ -73,6 +75,16 @@ class DashboardViewModel : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
+    }
+
+    fun getThemeSettings(): LiveData<Boolean> {
+        return pref.getThemeSetting().asLiveData()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        viewModelScope.launch {
+            pref.saveThemeSetting(isDarkModeActive)
+        }
     }
 
 }
